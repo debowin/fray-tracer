@@ -16,6 +16,7 @@ Fundamentals of Computer Graphics Project #2 Basic Ray Tracer
 - (5)	Reflection
 
 ### Showcase -
+
 |  Scene          |  Rendered          |
 |:-------------------------|:-------------------------:|
 |#Simple Sphere Scene<br>camera -6 2 -4 .77 0 .64 0 1 0 35<br>output_image spheres1.bmp<br>#"ground" sphere<br>material .75 .75 .75 .75 .75 .75 .3 .3 .3 32 .2 .2 .2 1.5<br>sphere 0 -50 0 50<br><br>#red sphere<br>material 1 0 0 1 0 0 .3 .3 .3 32 .2 .2 .2 1.5<br>sphere -3 1 0 .75<br><br>#green sphere<br>material 0 .7 0 0 .7 0 0 0 0 16 .9 .9 .9 1.1<br>sphere 0 1.25 0 1<br><br>#blue sphere<br>material 0 0 1 0 0 1 0 0 0 16 0 0 0 1.0<br>sphere 3 1.5 0 1.25<br><br>#white overhead light<br>point_light 10 10 10 0 5 0<br>ambient_light .25 .25 .25<br>background .05 .05 .05<br><br>max_depth 5 | ![](spheres1.bmp)  |
