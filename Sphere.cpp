@@ -35,5 +35,5 @@ HitInfo *Sphere::intersect(Ray ray, float tMin, float tMax) {
     }
     Vector p = ray.getOrigin() + ray.getDirection()*t1;
     Vector normal = p-center;
-    return new HitInfo(material, t1, normalize(normal), p);
+    return new HitInfo(material, t1, normalize(normal), p, ray.getDirection());
 }

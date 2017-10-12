@@ -130,11 +130,9 @@ HitInfo* Scene::hit(Ray viewingRay, float tMin, float tMax){
     HitInfo* hitBest = nullptr;
     for (auto sphere : spheres) {
         HitInfo *hitInfo = sphere.intersect(viewingRay, tMin, tMax);
-        if (hitInfo != nullptr) {
-            if (hitInfo->getT() < tBest) {
-                hitBest = hitInfo;
-                tBest = hitInfo->getT();
-            }
+        if (hitInfo != nullptr && hitInfo->getT() < tBest) {
+            hitBest = hitInfo;
+            tBest = hitInfo->getT();
         }
     }
     return hitBest;
@@ -145,28 +143,27 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
     HitInfo *hitBest = hit(viewingRay, 0.01, INFINITY);
     if(hitBest!=nullptr) {
         Colour finalColour = ambientLight.c * hitBest->getMaterial().getAmbient();
-        Colour diffuseColour{};
-        Colour specularColour{};
         for (auto light : pointLights) {
             Vector lambertian = light.v - hitBest->getPoint();
             HitInfo *shadowHit = hit(Ray(hitBest->getPoint(), normalize(lambertian)), 0.01, magnitude(lambertian));
             if (shadowHit == nullptr) {
                 Colour fallOffIntensity = light.c / pow(magnitude(lambertian), 2);
-                Vector half = lambertian - hitBest->getPoint();
-                diffuseColour =
-                        diffuseColour + fallOffIntensity * fmaxf(0.0, normalize(lambertian) * hitBest->getNormal())
+                Vector half = lambertian - hitBest->getD();
+                // diffuse shading
+                finalColour =
+                        finalColour + fallOffIntensity * fmaxf(0.0, normalize(lambertian) * hitBest->getNormal())
                                         * hitBest->getMaterial().getDiffuse();
-                specularColour = specularColour + fallOffIntensity *
+                // specular shading
+                finalColour = finalColour + fallOffIntensity *
                                                   pow(fmaxf(0.0, normalize(half) * hitBest->getNormal()),
                                                       hitBest->getMaterial().getNs())
                                                   * hitBest->getMaterial().getSpecular();
-                finalColour = finalColour + diffuseColour + specularColour;
             }
         }
         // ideal specular reflection
         if(!isBlack(hitBest->getMaterial().getSpecular()) && depth > 1) {
-            Vector reflected = hitBest->getPoint() -
-                               hitBest->getNormal() * 2 * (hitBest->getPoint() * hitBest->getNormal());
+            Vector reflected = hitBest->getD() -
+                               hitBest->getNormal() * 2 * (hitBest->getD() * hitBest->getNormal());
             finalColour = finalColour + hitBest->getMaterial().getSpecular() *
                                         getColour(Ray(hitBest->getPoint(), normalize(reflected)),
                                                   depth - 1);
