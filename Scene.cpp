@@ -49,7 +49,8 @@ int Scene::readSceneFile(string fileName) {
             Vector p{}, d{}, u{};
             input >> p.x >> p.y >> p.z >> d.x >> d.y >> d.z >> u.x >> u.y >> u.z >> ha;
             camera.setCamera(p, d, u, ha);
-            printf("Camera at position (%f,%f,%f) with view direction (%f,%f,%f), up (%f,%f,%f) and half angle %f.\n", p.x, p.y, p.z, d.x, d.y, d.z, u.x, u.y, u.z, ha);
+            printf("Camera at position (%f,%f,%f) with view direction (%f,%f,%f), up (%f,%f,%f) and half angle %f.\n",
+                   p.x, p.y, p.z, d.x, d.y, d.z, u.x, u.y, u.z, ha);
         } else if (command == "sphere") { //If the command is a sphere command
             float r;
             Vector p{};
@@ -92,7 +93,6 @@ int Scene::readSceneFile(string fileName) {
             cout << "WARNING. Do not know command: " << command << endl;
         }
     }
-    initializeFilm(0, 0, 0, 255);
 }
 
 
@@ -115,7 +115,8 @@ void Scene::initializeFilm(Component r, Component g, Component b, Component a) {
     }
 }
 
-void Scene::rayCast() {
+void Scene::rayTrace() {
+    initializeFilm(0, 0, 0, 255);
     Ray viewingRay;
     for (int j = 0; j < camera.getFilmHeight(); ++j) {
         for (int i = 0; i < camera.getFilmWidth(); ++i) {
@@ -162,11 +163,9 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
         }
         // ideal specular reflection
         if(!isBlack(hitBest->getMaterial().getSpecular()) && depth > 1) {
-            Vector reflected = hitBest->getD() -
-                               hitBest->getNormal() * 2 * (hitBest->getD() * hitBest->getNormal());
+            Vector reflected = hitBest->getD() - hitBest->getNormal() * 2 * (hitBest->getD() * hitBest->getNormal());
             finalColour = finalColour + hitBest->getMaterial().getSpecular() *
-                                        getColour(Ray(hitBest->getPoint(), normalize(reflected)),
-                                                  depth - 1);
+                                        getColour(Ray(hitBest->getPoint(), normalize(reflected)), depth - 1);
         }
         return finalColour;
     }

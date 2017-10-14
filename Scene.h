@@ -39,7 +39,7 @@ public:
     int readSceneFile(string fileName);
     void initializeFilm(Component r, Component g, Component b, Component a);
     void writeImageResult();
-    void rayCast();
+    void rayTrace();
     HitInfo* hit(Ray viewingRay, float tMin, float fMax);
 
     Colour getColour(Ray viewingRay, int depth);

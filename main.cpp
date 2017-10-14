@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
     fileName = argv[1];
     if(scene.readSceneFile(fileName)==1)
         return 2;
-    scene.rayCast();
+    scene.rayTrace();
     scene.writeImageResult();
     return 0;
 }
