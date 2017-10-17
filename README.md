@@ -1,9 +1,7 @@
 # Fray Tracer
-Fundamentals of Computer Graphics Project #2 A Fundamental Ray Tracer
+Computer Graphics Project #2 A Fundamental Ray Tracer
 
-A	simple	ray-tracing	application	capable	of
-rendering	scenes	consisting	of	spheres	lit	by	point	light	sources.	Scenes	will	be
-described	in	a	simple,	easy	to	parse	text	specification	file.
+A	simple	ray-tracing	application	capable	of rendering	scenes	consisting	of	spheres	lit	by	point	light	sources.	Scenes	will be described	in	a	simple,	easy	to	parse	text	specification	file.
 
 ### FEATURES
 
