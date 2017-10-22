@@ -11,21 +11,19 @@
 #include "Material.h"
 #include "Ray.h"
 #include "HitInfo.h"
+#include "Surface.h"
 
-class Sphere {
-    Vector center;
+class Sphere : public Surface{
+    Vector3D center;
     float r;
-    Material material;
 public:
-    Sphere(const Vector &center, float r, Material material);
+    Sphere(const Vector3D &center, float r, Material m);
 
-    const Vector &getPosition() const;
+    const Vector3D &getPosition() const;
 
     float getR() const;
 
-    const Material &getMaterial() const;
-
-    HitInfo* intersect(Ray ray, float fMin, float fMax);
+    HitInfo* intersect(Ray ray, float tMin, float tMax) override;
 };
 
 

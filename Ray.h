@@ -9,16 +9,16 @@
 #include "Basics.h"
 
 class Ray {
-    Vector origin;
-    Vector direction;
+    Vector3D origin;
+    Vector3D direction;
 public:
-    Ray(const Vector &origin, const Vector &direction);
+    Ray(const Vector3D &origin, const Vector3D &direction);
 
     Ray();
 
-    Vector getOrigin();
+    Vector3D getOrigin();
 
-    Vector getDirection() ;
+    Vector3D getDirection() ;
 };
 
 

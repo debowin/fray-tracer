@@ -4,19 +4,15 @@
 #include "Sphere.h"
 #include <cmath>
 
-Sphere::Sphere(const Vector &center, float r, Material material) : center(center), r(r),
-                                                                            material(std::move(material)) {}
+Sphere::Sphere(const Vector3D &center, float r, Material m) : center(center), r(r),
+                                                                            Surface(m) {}
 
-const Vector &Sphere::getPosition() const {
+const Vector3D &Sphere::getPosition() const {
     return center;
 }
 
 float Sphere::getR() const {
     return r;
-}
-
-const Material &Sphere::getMaterial() const {
-    return material;
 }
 
 HitInfo *Sphere::intersect(Ray ray, float tMin, float tMax) {
@@ -33,7 +29,7 @@ HitInfo *Sphere::intersect(Ray ray, float tMin, float tMax) {
         if(t1<tMin || t1 > tMax)
             return nullptr;
     }
-    Vector p = ray.getOrigin() + ray.getDirection()*t1;
-    Vector normal = p-center;
+    Vector3D p = ray.getOrigin() + ray.getDirection()*t1;
+    Vector3D normal = p-center;
     return new HitInfo(material, t1, normalize(normal), p, ray.getDirection());
 }

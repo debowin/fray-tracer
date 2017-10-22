@@ -9,10 +9,10 @@
 #include "Ray.h"
 
 class Camera {
-    Vector position;
-    Vector towards;
-    Vector up;
-    Vector right;
+    Vector3D position;
+    Vector3D towards;
+    Vector3D up;
+    Vector3D right;
     float ha; // Half angle for height of viewing frustum.
     float wa; // Half angle for width of viewing frustum.
     float focalLength;
@@ -27,9 +27,9 @@ private:
 
 public:
     Camera();
-    void setCamera(Vector p, Vector d, Vector u, float ha);
+    void setCamera(Vector3D p, Vector3D d, Vector3D u, float ha);
     void setFilm(int width, int height);
-    Ray getRay(int ix, int iy);
+    Ray getRay(float ix, float iy);
 };
 
 

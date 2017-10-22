@@ -10,7 +10,7 @@ float HitInfo::getT() const {
     return t;
 }
 
-HitInfo::HitInfo(Material material, float t, Vector normal, Vector point, Vector direction) :
+HitInfo::HitInfo(Material material, float t, Vector3D normal, Vector3D point, Vector3D direction) :
         material(std::move(material)), t(t), normal(normal), point(point), d(direction) {
 }
 
@@ -18,14 +18,14 @@ Material &HitInfo::getMaterial() {
     return material;
 }
 
-Vector &HitInfo::getNormal() {
+Vector3D &HitInfo::getNormal() {
     return normal;
 }
 
-Vector &HitInfo::getPoint() {
+Vector3D &HitInfo::getPoint() {
     return point;
 }
 
-Vector &HitInfo::getD() {
+Vector3D &HitInfo::getD() {
     return d;
 }

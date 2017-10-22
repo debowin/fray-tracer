@@ -20,7 +20,7 @@ Camera::Camera() {
     right = towards ^ up;
 }
 
-void Camera::setCamera(Vector p, Vector d, Vector u, float ha_) {
+void Camera::setCamera(Vector3D p, Vector3D d, Vector3D u, float ha_) {
     position = p;
     towards = d;
     up = u;
@@ -50,11 +50,11 @@ int Camera::getFilmHeight() const {
     return filmHeight;
 }
 
-Ray Camera::getRay(int ix, int iy) {
-    Vector direction{};
-    Vector u{}, v{};
+Ray Camera::getRay(float ix, float iy) {
+    Vector3D direction{};
+    Vector3D u{}, v{};
 
-    Vector pRight{}, pLeft{}, pTop{}, pBottom{};
+    Vector3D pRight{}, pLeft{}, pTop{}, pBottom{};
 
     pLeft = position + towards * focalLength - right * (filmWidth/2);
     pRight = position + towards * focalLength + right * (filmWidth/2);
@@ -62,8 +62,8 @@ Ray Camera::getRay(int ix, int iy) {
     pBottom = position + towards * focalLength - up * (filmHeight/2);
     pTop = position + towards * focalLength + up * (filmHeight/2);
 
-    u = pLeft + (pRight - pLeft)*((ix+0.5f)/filmWidth);
-    v = pBottom + (pTop - pBottom)*((iy+0.5f)/filmHeight);
+    u = pLeft + (pRight - pLeft)*((ix)/filmWidth);
+    v = pBottom + (pTop - pBottom)*((iy)/filmHeight);
 
     // d = s - p
     direction = u + v - towards*focalLength - position;

@@ -42,55 +42,73 @@ void setRGB(Colour* colour, float r, float g, float b);
 
 bool isBlack(Colour colour);
 
-struct Vector{
+struct Vector3D{
     float x, y, z;
-    Vector& operator=(Vector v){
+    Vector3D& operator=(Vector3D v){
         x = v.x;
         y = v.y;
         z = v.z;
         return *this;
     }
 
-    Vector operator+(Vector v){
+    Vector3D operator+(Vector3D v){
         return {x+v.x, y+v.y, z+v.z};
     }
 
-    Vector operator-(Vector v){
+    Vector3D operator-(Vector3D v){
         return {x-v.x, y-v.y, z-v.z};
     }
 
-    float operator*(Vector v){
+    float operator*(Vector3D v){
         // dot product
         return x*v.x + y*v.y + z*v.z;
     }
 
-    Vector operator*(float c){
+    Vector3D operator*(float c){
         return {x*c, y*c, z*c};
     }
 
-    Vector operator^(Vector v){
+    Vector3D operator^(Vector3D v){
         // cross product
         return {z*v.y - y*v.z, z*v.x-x*v.z, y*v.x - x*v.y};
     }
 
-    Vector operator-(){
+    Vector3D operator-(){
         return {-x, -y, -z};
     }
 };
 
-void setXYZ(Vector* vector, float x, float y, float z);
-Vector normalize(Vector vector);
-float magnitude(Vector vector);
+void setXYZ(Vector3D* vector, float x, float y, float z);
+Vector3D normalize(Vector3D vector);
+float magnitude(Vector3D vector);
+float angleBetween(Vector3D u, Vector3D v);
+
+// Ray Triangle Intersections
+struct Matrix3D{
+    float   a, b, c,
+            d, e, f,
+            g, h, i;
+    Matrix3D& operator=(Matrix3D m){
+        a = m.a; b = m.b; c = m.c;
+        d = m.d; e = m.e; f = m.f;
+        g = m.g; h = m.h; i = m.i;
+        return *this;
+    }
+};
+
+Matrix3D setColumn(Matrix3D, Vector3D col, int colId);
+
+float determinant(Matrix3D mat);
 
 struct Light{
     Colour c;
-    Vector v;
+    Vector3D v;
 };
 
 struct SpotLight{
     Colour c;
-    Vector p;
-    Vector d;
+    Vector3D p;
+    Vector3D d;
     float angle1, angle2;
 };
 

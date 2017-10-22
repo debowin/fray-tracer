@@ -28,12 +28,23 @@ class Scene {
     Camera camera;
     string output_image;
     Colour background;
-    vector<Sphere> spheres;
+    vector<Surface*> surfaces;
     vector<Light> directionalLights;
     vector<Light> pointLights;
     vector<SpotLight> spotLights;
     Light ambientLight;
     int maxDepth;
+    int maxVertices;
+    int maxNormals;
+    vector<Vector3D> vertices;
+    vector<Vector3D> normals;
+    int samplingRate;
+    enum SamplingMethod{
+        BASIC=0,
+        REGULAR=1,
+        RANDOM=2,
+        JITTERED=3
+    } samplingMethod;
 
 public:
     int readSceneFile(string fileName);
@@ -43,6 +54,14 @@ public:
     HitInfo* hit(Ray viewingRay, float tMin, float fMax);
 
     Colour getColour(Ray viewingRay, int depth);
+
+    Colour basicSampling(int i, int j);
+
+    Colour regularSampling(int i, int j);
+
+    Colour randomSampling(int i, int j);
+
+    Colour jitteredSampling(int i, int j);
 };
 
 

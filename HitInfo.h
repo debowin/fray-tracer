@@ -11,21 +11,21 @@
 class HitInfo {
     Material material;
     float t;
-    Vector d;
-    Vector normal;
-    Vector point;
+    Vector3D d;
+    Vector3D normal;
+    Vector3D point;
 public:
     float getT() const;
 
-    HitInfo(Material material, float t, Vector normal, Vector point, Vector direction);
+    HitInfo(Material material, float t, Vector3D normal, Vector3D point, Vector3D direction);
 
     Material &getMaterial();
 
-    Vector &getNormal();
+    Vector3D &getNormal();
 
-    Vector &getPoint();
+    Vector3D &getPoint();
 
-    Vector &getD();
+    Vector3D &getD();
 };
 
 

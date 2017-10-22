@@ -4,13 +4,13 @@
 
 #include "Ray.h"
 
-Ray::Ray(const Vector &origin, const Vector &direction) : origin(origin), direction(direction) {}
+Ray::Ray(const Vector3D &origin, const Vector3D &direction) : origin(origin), direction(direction) {}
 
-Vector Ray::getOrigin() {
+Vector3D Ray::getOrigin() {
     return origin;
 }
 
-Vector Ray::getDirection() {
+Vector3D Ray::getDirection() {
     return direction;
 }
 

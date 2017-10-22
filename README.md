@@ -9,13 +9,17 @@ A	simple	ray-tracing	application	capable	of rendering	scenes	consisting	of	spher
 - User	specified	background	colors
 - BMP	or	PNG	output
 - Spheres
+- Triangles
 - Ambient	lights
 - Point	light	sources
+- Directional lights
+- Spot Light Sources
 - Shadows
 - Multiple	light	sources
 - Basic	Sampling
 - Color	&	Specularity	(Phong	Lighting	Model)
 - Reflection
+- Supersampling - Regular, Random, Jittered
 
 ### SHOWCASE
 
@@ -24,5 +28,4 @@ A	simple	ray-tracing	application	capable	of rendering	scenes	consisting	of	spher
 | [spheres1.scn](https://raw.github.com/debowin/fray-tracer/master/scenes/spheres1.scn) | ![](output/spheres1.bmp)  |
 | [spheres2.scn](https://raw.github.com/debowin/fray-tracer/master/scenes/spheres2.scn) | ![](output/spheres2.bmp)|
 | [bear.scn](https://raw.github.com/debowin/fray-tracer/master/scenes/bear.scn) | ![](output/bear.bmp)|
-
-### DOWNLOAD [Source Code Zip](http://github.com/debowin/fray-tracer/zipball/master/)
+| [spheres3.scn](https://raw.github.com/debowin/fray-tracer/master/scenes/spheres3.scn) | ![](output/spheres3.bmp)|
