@@ -30,5 +30,7 @@ HitInfo *Triangle::intersect(Ray ray, float tMin, float tMax) {
     if(beta<0 || beta > 1-gamma)
         return nullptr;
     Vector3D normal = n1*(1-beta-gamma) + n2*beta + n3*gamma;
+    if(normal*d>0)
+        normal = -normal;
     return new HitInfo(material, t, normalize(normal), e+d*t, normalize(d));
 }

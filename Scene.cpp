@@ -291,7 +291,7 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
             }
         }
         if(depth > 0) {
-            float R = 1.0f;
+//            float R = 1.0f;
             // transmission and refraction
             if(!isBlack(hitBest->getMaterial().getTransmissive())) {
                 Vector3D refracted{};
@@ -306,8 +306,8 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
                 }
                 if(cosine!=INFINITY) {
                     // shlick approximation
-                    float R0 = powf(hitBest->getMaterial().getIor() - 1, 2) / powf(hitBest->getMaterial().getIor() + 1, 2);
-                    R = R0 + (1 - R0) * powf(1 - cosine, 5);
+//                    float R0 = powf(hitBest->getMaterial().getIor() - 1, 2) / powf(hitBest->getMaterial().getIor() + 1, 2);
+//                    R = R0 + (1 - R0) * powf(1 - cosine, 5);
                     finalColour = finalColour + hitBest->getMaterial().getTransmissive() *
                                                 getColour(Ray(hitBest->getPoint(), normalize(refracted)), depth - 1);
                 }

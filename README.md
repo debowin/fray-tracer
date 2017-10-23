@@ -92,3 +92,11 @@ A ray-tracing	application	capable	of rendering fairly complex scenes.	Scenes	wil
 
 [Scene File](https://raw.github.com/debowin/fray-tracer/master/scenes/arm-top.txt)
 
+---
+
+### Dragon
+![](output/dragon.bmp)
+
+![](output/dragon-front.bmp)
+
+[Scene File](https://raw.github.com/debowin/fray-tracer/master/scenes/dragon.txt)
