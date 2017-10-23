@@ -41,7 +41,7 @@ class Scene {
     int samplingRate;
     enum SamplingMethod{
         BASIC=0,
-        REGULAR=1,
+        UNIFORM=1,
         RANDOM=2,
         JITTERED=3
     } samplingMethod;
@@ -51,7 +51,7 @@ public:
     void initializeFilm(Component r, Component g, Component b, Component a);
     void writeImageResult();
     void rayTrace();
-    HitInfo* hit(Ray viewingRay, float tMin, float fMax);
+    HitInfo* hit(Ray viewingRay, float tMin, float fMax, bool isShadowRay);
 
     Colour getColour(Ray viewingRay, int depth);
 
@@ -62,6 +62,8 @@ public:
     Colour randomSampling(int i, int j);
 
     Colour jitteredSampling(int i, int j);
+
+    bool getRefractedRay(Vector3D d, Vector3D n, float ior, Vector3D *refracted);
 };
 
 

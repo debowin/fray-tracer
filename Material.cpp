@@ -34,7 +34,7 @@ Colour &Material::getSpecular() {
     return specular;
 }
 
-const Colour &Material::getTransmissive() const {
+Colour &Material::getTransmissive() {
     return transmissive;
 }
 

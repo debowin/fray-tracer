@@ -30,7 +30,7 @@ int Scene::readSceneFile(string fileName) {
     maxDepth = 5;
     maxNormals = -1;
     maxVertices = -1;
-    samplingMethod = JITTERED;
+    samplingMethod = BASIC;
     samplingRate = 3;
 
     //Loop through reading each line
@@ -132,8 +132,15 @@ int Scene::readSceneFile(string fileName) {
                    p.x, p.y, p.z, v.x, v.y, v.z, c.r, c.g, c.b, a1, a2);
         } else if (command == "max_vertices"){ // If the command is a max_vertices command
             input >> maxVertices;
+            printf("Max Vertices set as: %d\n", maxVertices);
         } else if (command == "max_normals"){ // If the command is a max_normals command
             input >> maxNormals;
+            printf("Max Normals set as: %d\n", maxNormals);
+        } else if (command == "supersampling"){ // If the command is a sampling command
+            int supersamplingMethod;
+            input >> supersamplingMethod >> samplingRate;
+            samplingMethod = SamplingMethod(supersamplingMethod);
+            printf("Supersampling method set to %d with sampling rate of: %d\n", samplingMethod, samplingRate);
         } else if (command == "output_image") { //If the command is an output_image command
             string outFile;
             input >> outFile;
@@ -185,7 +192,7 @@ void Scene::rayTrace() {
                 case BASIC:
                     pixelColour = basicSampling(i, j);
                     break;
-                case REGULAR:
+                case UNIFORM:
                     pixelColour = regularSampling(i, j);
                     break;
                 case RANDOM:
@@ -200,14 +207,18 @@ void Scene::rayTrace() {
     }
 }
 
-HitInfo *Scene::hit(Ray viewingRay, float tMin, float tMax) {
+HitInfo *Scene::hit(Ray viewingRay, float tMin, float tMax, bool isShadowRay) {
     float tBest = INFINITY;
     HitInfo *hitBest = nullptr;
     for (const auto &surface : surfaces) {
         HitInfo *hitInfo = surface->intersect(viewingRay, tMin, tMax);
-        if (hitInfo != nullptr && hitInfo->getT() < tBest) {
-            hitBest = hitInfo;
-            tBest = hitInfo->getT();
+        if (hitInfo != nullptr) {
+            if(isShadowRay)
+                return hitInfo;
+            if (hitInfo->getT() < tBest) {
+                hitBest = hitInfo;
+                tBest = hitInfo->getT();
+            }
         }
     }
     return hitBest;
@@ -215,12 +226,12 @@ HitInfo *Scene::hit(Ray viewingRay, float tMin, float tMax) {
 
 
 Colour Scene::getColour(Ray viewingRay, int depth) {
-    HitInfo *hitBest = hit(viewingRay, 0.01, INFINITY);
+    HitInfo *hitBest = hit(viewingRay, 0.01, INFINITY, false);
     if (hitBest != nullptr) {
         Colour finalColour = ambientLight.c * hitBest->getMaterial().getAmbient();
         for (auto light : pointLights) {
             Vector3D lambertian = light.v - hitBest->getPoint();
-            HitInfo *shadowHit = hit(Ray(hitBest->getPoint(), normalize(lambertian)), 0.01, magnitude(lambertian));
+            HitInfo *shadowHit = hit(Ray(hitBest->getPoint(), normalize(lambertian)), 0.01, magnitude(lambertian), true);
             if (shadowHit == nullptr) {
                 // quadratic falloff
                 Colour fallOffIntensity = light.c / pow(magnitude(lambertian), 2);
@@ -238,7 +249,7 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
         }
         for (auto light: directionalLights) {
             Vector3D lambertian = -light.v;
-            HitInfo *shadowHit = hit(Ray(hitBest->getPoint(), normalize(lambertian)), 0.01, INFINITY);
+            HitInfo *shadowHit = hit(Ray(hitBest->getPoint(), normalize(lambertian)), 0.01, INFINITY, true);
             if (shadowHit == nullptr) {
                 // no falloff
                 Vector3D half = lambertian - hitBest->getD();
@@ -255,7 +266,7 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
         }
         for(auto light: spotLights){
             Vector3D lambertian = light.p - hitBest->getPoint();
-            HitInfo *shadowHit = hit(Ray(hitBest->getPoint(), normalize(lambertian)), 0.01, magnitude(lambertian));
+            HitInfo *shadowHit = hit(Ray(hitBest->getPoint(), normalize(lambertian)), 0.01, magnitude(lambertian), true);
             if (shadowHit == nullptr) {
                 // angle based linear falloff
                 float angle = angleBetween(-lambertian, light.d);
@@ -279,11 +290,35 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
                                             * hitBest->getMaterial().getSpecular();
             }
         }
-        // ideal specular reflection
-        if (!isBlack(hitBest->getMaterial().getSpecular()) && depth > 1) {
-            Vector3D reflected = hitBest->getD() - hitBest->getNormal() * 2 * (hitBest->getD() * hitBest->getNormal());
-            finalColour = finalColour + hitBest->getMaterial().getSpecular() *
-                                        getColour(Ray(hitBest->getPoint(), normalize(reflected)), depth - 1);
+        if(depth > 0) {
+            float R = 1.0f;
+            // transmission and refraction
+            if(!isBlack(hitBest->getMaterial().getTransmissive())) {
+                Vector3D refracted{};
+                float cosine = INFINITY;
+                if(hitBest->getD()*hitBest->getNormal() < 0) {
+                    // going into denser medium
+                    cosine = -hitBest->getD()*hitBest->getNormal();
+                    getRefractedRay(hitBest->getD(),hitBest->getNormal(), hitBest->getMaterial().getIor(), &refracted);
+                } else if(getRefractedRay(hitBest->getD(), -hitBest->getNormal(), 1/hitBest->getMaterial().getIor(), &refracted)){
+                    // if total internal reflection doesn't occur
+                    cosine = refracted * hitBest->getNormal();
+                }
+                if(cosine!=INFINITY) {
+                    // shlick approximation
+                    float R0 = powf(hitBest->getMaterial().getIor() - 1, 2) / powf(hitBest->getMaterial().getIor() + 1, 2);
+                    R = R0 + (1 - R0) * powf(1 - cosine, 5);
+                    finalColour = finalColour + hitBest->getMaterial().getTransmissive() *
+                                                getColour(Ray(hitBest->getPoint(), normalize(refracted)), depth - 1);
+                }
+            }
+            // ideal specular reflection
+            if (!isBlack(hitBest->getMaterial().getSpecular())) {
+                Vector3D reflected =
+                        hitBest->getD() - hitBest->getNormal() * 2 * (hitBest->getD() * hitBest->getNormal());
+                finalColour = finalColour + hitBest->getMaterial().getSpecular() *
+                                            getColour(Ray(hitBest->getPoint(), normalize(reflected)), depth - 1);
+            }
         }
         return finalColour;
     }
@@ -331,4 +366,13 @@ Colour Scene::jitteredSampling(int i, int j) {
         }
     }
     return c / pow(samplingRate, 2);
+}
+
+bool Scene::getRefractedRay(Vector3D d,Vector3D n, float ior, Vector3D *refracted) {
+    float c = 1-(1-powf(d*n, 2))/powf(ior, 2);
+    if(c<0)
+        return false;
+    *refracted = (d - n*(d*n))*(1/ior) - n*sqrt(c);
+    *refracted = normalize(*refracted);
+    return true;
 }

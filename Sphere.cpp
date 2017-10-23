@@ -4,8 +4,7 @@
 #include "Sphere.h"
 #include <cmath>
 
-Sphere::Sphere(const Vector3D &center, float r, Material m) : center(center), r(r),
-                                                                            Surface(m) {}
+Sphere::Sphere(const Vector3D &center, float r, Material m) : center(center), r(r), Surface(m) {}
 
 const Vector3D &Sphere::getPosition() const {
     return center;
@@ -31,5 +30,5 @@ HitInfo *Sphere::intersect(Ray ray, float tMin, float tMax) {
     }
     Vector3D p = ray.getOrigin() + ray.getDirection()*t1;
     Vector3D normal = p-center;
-    return new HitInfo(material, t1, normalize(normal), p, ray.getDirection());
+    return new HitInfo(material, t1, normalize(normal), p, normalize(ray.getDirection()));
 }

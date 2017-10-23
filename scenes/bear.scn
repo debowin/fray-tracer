@@ -4,7 +4,7 @@
 #Camera Set-up
 camera 1 3 7 -.1 -.1 -1 0 1 0 26
 output_image bear.bmp
-
+supersampling 3 3
 
 #Light Brown Body "Fur" Material
 material 0.44 0.37 0.10 0.44 0.37 0.10 0 0 0 2 0 0 0 1.0

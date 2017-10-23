@@ -51,6 +51,10 @@ struct Vector3D{
         return *this;
     }
 
+    bool operator==(Vector3D v){
+        return x == v.x && y == v.y && z == v.z;
+    }
+
     Vector3D operator+(Vector3D v){
         return {x+v.x, y+v.y, z+v.z};
     }

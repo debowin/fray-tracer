@@ -26,7 +26,7 @@ public:
 
     Colour &getSpecular();
 
-    const Colour &getTransmissive() const;
+    Colour &getTransmissive();
 
     float getNs() const;
 

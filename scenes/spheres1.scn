@@ -1,6 +1,7 @@
 #Simple Sphere Sceen
 camera -6 2 -4 .77 0 .64 0 1 0 35
 output_image spheres1.bmp
+supersampling 1 3
 
 #"ground" sphere
 material .75 .75 .75 .75 .75 .75 .3 .3 .3 32 .2 .2 .2 1.5
