@@ -184,7 +184,7 @@ void Scene::initializeFilm(Component r, Component g, Component b, Component a) {
 
 void Scene::rayTrace() {
     initializeFilm(0, 0, 0, 255);
-#pragma omp parallel for
+#pragma omp parallel for schedule(dynamic, 7)
     for (int j = 0; j < camera.getFilmHeight(); ++j) {
         for (int i = 0; i < camera.getFilmWidth(); ++i) {
             Colour pixelColour{};
@@ -291,7 +291,7 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
             }
         }
         if(depth > 0) {
-//            float R = 1.0f;
+            float R = 1.0f;
             // transmission and refraction
             if(!isBlack(hitBest->getMaterial().getTransmissive())) {
                 Vector3D refracted{};
@@ -306,10 +306,10 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
                 }
                 if(cosine!=INFINITY) {
                     // shlick approximation
-//                    float R0 = powf(hitBest->getMaterial().getIor() - 1, 2) / powf(hitBest->getMaterial().getIor() + 1, 2);
-//                    R = R0 + (1 - R0) * powf(1 - cosine, 5);
+                    float R0 = powf(hitBest->getMaterial().getIor() - 1, 2) / powf(hitBest->getMaterial().getIor() + 1, 2);
+                    R = R0 + (1 - R0) * powf(1 - cosine, 5);
                     finalColour = finalColour + hitBest->getMaterial().getTransmissive() *
-                                                getColour(Ray(hitBest->getPoint(), normalize(refracted)), depth - 1);
+                                                getColour(Ray(hitBest->getPoint(), normalize(refracted)), depth - 1) * (1-R);
                 }
             }
             // ideal specular reflection
@@ -317,7 +317,7 @@ Colour Scene::getColour(Ray viewingRay, int depth) {
                 Vector3D reflected =
                         hitBest->getD() - hitBest->getNormal() * 2 * (hitBest->getD() * hitBest->getNormal());
                 finalColour = finalColour + hitBest->getMaterial().getSpecular() *
-                                            getColour(Ray(hitBest->getPoint(), normalize(reflected)), depth - 1);
+                                            getColour(Ray(hitBest->getPoint(), normalize(reflected)), depth - 1) * R;
             }
         }
         return finalColour;
@@ -358,7 +358,6 @@ Colour Scene::jitteredSampling(int i, int j) {
     std::random_device rd;
     std::mt19937 mt(rd());
     std::uniform_real_distribution<float> dist(0.0, 1.0);
-#pragma omp parallel for
     for (int p = 0; p < samplingRate; p++) {
         for (int q = 0; q < samplingRate; q++) {
             Ray viewingRay = camera.getRay(i + (p + dist(mt)) / samplingRate, j + (q + dist(mt)) / samplingRate);

@@ -83,7 +83,9 @@ sphere 0 2.952 1.468 0.121
 #White overhead light
 point_light 20 20 20 0 5 5
 point_light 50 50 50 10 5 -5
+point_light 1000 100 5 -10 -20 3
+point_light 1000 100 5 10 -20 3
 ambient_light .4 .4 .4
-background .7 .8 1
+background .1 .1 .1
 
 max_depth 2

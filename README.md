@@ -20,6 +20,7 @@ A ray-tracing	application	capable	of rendering fairly complex scenes.	Scenes	wil
 - Color	&	Specularity	(Phong	Lighting	Model)
 - Reflection
 - Refraction
+- Fresnel Reflectivity
 - Supersampling - Uniform, Random, Jittered
 
 ## SHOWCASE
