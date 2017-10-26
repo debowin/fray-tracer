@@ -184,7 +184,7 @@ void Scene::initializeFilm(Component r, Component g, Component b, Component a) {
 
 void Scene::rayTrace() {
     initializeFilm(0, 0, 0, 255);
-#pragma omp parallel for schedule(dynamic, 7)
+#pragma omp parallel for schedule(dynamic, 10) collapse(2)
     for (int j = 0; j < camera.getFilmHeight(); ++j) {
         for (int i = 0; i < camera.getFilmWidth(); ++i) {
             Colour pixelColour{};

@@ -22,6 +22,7 @@ A ray-tracing	application	capable	of rendering fairly complex scenes.	Scenes	wil
 - Refraction
 - Fresnel Reflectivity
 - Supersampling - Uniform, Random, Jittered
+- Parallelization with OpenMP
 
 ## SHOWCASE
 
