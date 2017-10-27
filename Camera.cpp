@@ -23,14 +23,14 @@ Camera::Camera() {
 void Camera::setCamera(Vector3D p, Vector3D d, Vector3D u, float ha_) {
     position = p;
     towards = d;
-    up = u;
+    // right vector
+    right = normalize(towards ^ u);
+    up = normalize(right ^ towards);
     ha = ha_;
     // focal length
     focalLength = filmHeight/(2 * std::tan(ha*(float)M_PI/180));
     //width angle
     wa = (float)(atan2(filmWidth/2, focalLength) * 180/M_PI);
-    // right vector
-    right = towards ^ up;
 }
 
 void Camera::setFilm(int width, int height){

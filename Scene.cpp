@@ -54,7 +54,7 @@ int Scene::readSceneFile(string fileName) {
             float ha;
             Vector3D p{}, d{}, u{};
             input >> p.x >> p.y >> p.z >> d.x >> d.y >> d.z >> u.x >> u.y >> u.z >> ha;
-            camera.setCamera(p, d, u, ha);
+            camera.setCamera(p, normalize(d), normalize(u), ha);
             printf("Camera at position (%f, %f, %f) with view direction (%f, %f, %f), up (%f, %f, %f) and half angle %f.\n",
                    p.x, p.y, p.z, d.x, d.y, d.z, u.x, u.y, u.z, ha);
         } else if (command == "sphere") { //If the command is a sphere command
@@ -93,7 +93,7 @@ int Scene::readSceneFile(string fileName) {
             }
             Vector3D d{};
             input >> d.x >> d.y >> d.z;
-            normals.push_back(d);
+            normals.push_back(normalize(d));
             printf("Normal #%ld in direction (%f, %f, %f).\n", normals.size(), d.x, d.y, d.z);
         } else if (command == "background") { //If the command is a background command
             float r, g, b;
@@ -116,7 +116,7 @@ int Scene::readSceneFile(string fileName) {
             Colour c{};
             Vector3D v{};
             input >> c.r >> c.g >> c.b >> v.x >> v.y >> v.z;
-            Light directionalLight{c, v};
+            Light directionalLight{c, normalize(v)};
             directionalLights.push_back(directionalLight);
             printf("Directional Light added in direction (%f, %f, %f) with color of (%f, %f, %f).\n", v.x, v.y, v.z,
                    c.r, c.g, c.b);
@@ -126,7 +126,7 @@ int Scene::readSceneFile(string fileName) {
             Vector3D p{};
             float a1, a2;
             input >> c.r >> c.g >> c.b >> p.x >> p.y >> p.z >> v.x >> v.y >> v.z >> a1 >> a2;
-            SpotLight spotLight{c, p, v, a1, a2};
+            SpotLight spotLight{c, p, normalize(v), a1, a2};
             spotLights.push_back(spotLight);
             printf("Spot Light added at (%f, %f, %f) in direction (%f, %f, %f) with color of (%f, %f, %f) and angles (%f, %f).\n",
                    p.x, p.y, p.z, v.x, v.y, v.z, c.r, c.g, c.b, a1, a2);
@@ -202,7 +202,7 @@ void Scene::rayTrace() {
                     pixelColour = jitteredSampling(i, j);
                     break;
             }
-            data.pixels[(camera.getFilmHeight() - 1 - j) * camera.getFilmWidth() + i] = Pixel(pixelColour);
+            data.pixels[(camera.getFilmHeight() - 1 - j) * camera.getFilmWidth() + (camera.getFilmWidth() - 1 - i)] = Pixel(pixelColour);
         }
     }
 }

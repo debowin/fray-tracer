@@ -8,7 +8,7 @@ output_image arm.bmp
 #film_resolution 800 600
 #film_resolution 1024 768
 #film_resolution 1920 1080
-supersampling 1 3
+#supersampling 1 3
 
 
 #White overhead light

@@ -74,7 +74,7 @@ struct Vector3D{
 
     Vector3D operator^(Vector3D v){
         // cross product
-        return {z*v.y - y*v.z, z*v.x-x*v.z, y*v.x - x*v.y};
+        return {y*v.z - z*v.y, z*v.x-x*v.z, x*v.y - y*v.x};
     }
 
     Vector3D operator-(){

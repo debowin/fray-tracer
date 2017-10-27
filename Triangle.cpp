@@ -5,7 +5,7 @@
 #include "Triangle.h"
 
 Triangle::Triangle(Vector3D &v1, Vector3D &v2, Vector3D &v3, Material m) : v1(v1), v2(v2), v3(v3), Surface(m) {
-    n1 = n2 = n3 = (v2-v1)^(v3-v1);
+    n1 = n2 = n3 = normalize((v2-v1)^(v3-v1));
 }
 
 Triangle::Triangle(Vector3D &v1, Vector3D &v2, Vector3D &v3, Vector3D &n1, Vector3D &n2,

@@ -75,6 +75,13 @@ A ray-tracing	application	capable	of rendering fairly complex scenes.	Scenes	wil
 
 ---
 
+### Bottle (No Label)
+![](output/bottle-nolabel.bmp)
+
+[Scene File](https://raw.github.com/debowin/fray-tracer/master/scenes/bottle-nolabel.txt)
+
+---
+
 ### Gear
 ![](output/gear.bmp)
 
