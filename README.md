@@ -1,5 +1,6 @@
 # Fray Tracer
 A Fundamental Ray Tracer
+
 A ray-tracing	application	capable	of rendering fairly complex scenes.	Scenes	will be described	in	a	simple,	easy	to	parse	text	specification	file.
 
 ## FEATURES
